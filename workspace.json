@@ -1,0 +1,38 @@
+{
+  "projects": {
+    "go-service": {
+      "root": "apps/go-service",
+      "targets": {
+        "build": {
+          "executor": "@nx/workspace:run-commands",
+          "options": {
+            "command": "go build -o dist/go-service ./apps/go-service"
+          }
+        },
+        "serve": {
+          "executor": "@nx/workspace:run-commands",
+          "options": {
+            "command": "go run ./apps/go-service"
+          }
+        }
+      }
+    },
+    "rust-service": {
+      "root": "apps/rust-service",
+      "targets": {
+        "build": {
+          "executor": "@nx/workspace:run-commands",
+          "options": {
+            "command": "cargo build --release"
+          }
+        },
+        "serve": {
+          "executor": "@nx/workspace:run-commands",
+          "options": {
+            "command": "cargo run"
+          }
+        }
+      }
+    }
+  }
+}
