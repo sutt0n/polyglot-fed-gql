@@ -1,0 +1,26 @@
+extends type Player @key(fields: "id") {
+  id: ID! @external
+}
+
+enum DamageType {
+  FIRE
+  ICE
+  LIGHTNING
+  POISON
+  PHYSICAL
+}
+
+type CastedSpell {
+  spell: String!
+  type: DamageType!
+  playerId: ID!
+  damage: Float!
+}
+
+type Mutation {
+  castSpell(spell: String!, type: DamageType!, playerId: ID!): Boolean
+}
+
+type Subscription {
+  spellsCasted(target: String!): CastedSpell
+}
