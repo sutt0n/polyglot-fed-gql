@@ -7,24 +7,61 @@ package graph
 import (
 	"apps/go-service/graph/model"
 	"context"
-	"fmt"
+	"math/rand"
 )
 
-// CreateTodo is the resolver for the createTodo field.
-func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) (*model.Todo, error) {
-	panic(fmt.Errorf("not implemented: CreateTodo - createTodo"))
+// CastSpell is the resolver for the castSpell field.
+func (r *mutationResolver) CastSpell(ctx context.Context, spell string, typeArg model.DamageType, playerID string) (*bool, error) {
+  // ranodm damage between 1 and 10
+  randomDmgFloat := rand.Float64() * 10
+
+  spellToCast := model.CastedSpell{
+  	Spell:    spell,
+  	Type:     typeArg,
+  	PlayerID: playerID,
+  	Damage:   randomDmgFloat,
+  }
+
+  r.CastedSpells = append(r.CastedSpells, &spellToCast)
+
+  r.mu.Lock()
+
+  for _, observer := range r.SpellObservers {
+    	observer <- &spellToCast
+    }
+  r.mu.Unlock()
+
+  result := true
+
+  return &result, nil
 }
 
-// Todos is the resolver for the todos field.
-func (r *queryResolver) Todos(ctx context.Context) ([]*model.Todo, error) {
-	panic(fmt.Errorf("not implemented: Todos - todos"))
+// SpellsCasted is the resolver for the spellsCasted field.
+func (r *subscriptionResolver) SpellsCasted(ctx context.Context, target string) (<-chan *model.CastedSpell, error) {
+  id := randString(8)
+  spells := make(chan *model.CastedSpell, 1)
+
+  go func() {
+    <-ctx.Done()
+    r.mu.Lock()
+    delete(r.SpellObservers, id)
+    r.mu.Unlock()
+  }()
+
+  r.mu.Lock()
+  r.SpellObservers[id] = spells
+  r.mu.Unlock()
+
+  // r.SpellObservers[id] <- spells
+
+  return spells, nil
 }
 
 // Mutation returns MutationResolver implementation.
 func (r *Resolver) Mutation() MutationResolver { return &mutationResolver{r} }
 
-// Query returns QueryResolver implementation.
-func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
+// Subscription returns SubscriptionResolver implementation.
+func (r *Resolver) Subscription() SubscriptionResolver { return &subscriptionResolver{r} }
 
 type mutationResolver struct{ *Resolver }
-type queryResolver struct{ *Resolver }
+type subscriptionResolver struct{ *Resolver }

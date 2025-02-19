@@ -1,4 +1,4 @@
-extends type Player @key(fields: "id") {
+extend type Player @key(fields: "id") {
   id: ID! @external
 }
 

@@ -2,25 +2,77 @@
 
 package model
 
+import (
+	"fmt"
+	"io"
+	"strconv"
+)
+
+type CastedSpell struct {
+	Spell    string     `json:"spell"`
+	Type     DamageType `json:"type"`
+	PlayerID string     `json:"playerId"`
+	Damage   float64    `json:"damage"`
+}
+
 type Mutation struct {
 }
 
-type NewTodo struct {
-	Text   string `json:"text"`
-	UserID string `json:"userId"`
+type Player struct {
+	ID string `json:"id"`
 }
+
+func (Player) IsEntity() {}
 
 type Query struct {
 }
 
-type Todo struct {
-	ID   string `json:"id"`
-	Text string `json:"text"`
-	Done bool   `json:"done"`
-	User *User  `json:"user"`
+type Subscription struct {
 }
 
-type User struct {
-	ID   string `json:"id"`
-	Name string `json:"name"`
+type DamageType string
+
+const (
+	DamageTypeFire      DamageType = "FIRE"
+	DamageTypeIce       DamageType = "ICE"
+	DamageTypeLightning DamageType = "LIGHTNING"
+	DamageTypePoison    DamageType = "POISON"
+	DamageTypePhysical  DamageType = "PHYSICAL"
+)
+
+var AllDamageType = []DamageType{
+	DamageTypeFire,
+	DamageTypeIce,
+	DamageTypeLightning,
+	DamageTypePoison,
+	DamageTypePhysical,
+}
+
+func (e DamageType) IsValid() bool {
+	switch e {
+	case DamageTypeFire, DamageTypeIce, DamageTypeLightning, DamageTypePoison, DamageTypePhysical:
+		return true
+	}
+	return false
+}
+
+func (e DamageType) String() string {
+	return string(e)
+}
+
+func (e *DamageType) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = DamageType(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid DamageType", str)
+	}
+	return nil
+}
+
+func (e DamageType) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
 }
