@@ -2,13 +2,12 @@ package main
 
 import (
 	"apps/go-service/graph"
-  "apps/go-service/graph/model"
+	"apps/go-service/graph/model"
+	"github.com/gorilla/websocket"
 	"log"
 	"net/http"
 	"os"
-  "time"
-  "github.com/gorilla/websocket"
-
+	"time"
 
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/handler/extension"
@@ -27,11 +26,11 @@ func main() {
 	}
 
 	srv := handler.New(graph.NewExecutableSchema(graph.Config{Resolvers: &graph.Resolver{
-    CastedSpells: []*model.CastedSpell{},
-    SpellObservers: map[string]chan *model.CastedSpell{},
-  }}))
+		CastedSpells:   []*model.CastedSpell{},
+		SpellObservers: map[string]chan *model.CastedSpell{},
+	}}))
 
-  srv.AddTransport(transport.Websocket{
+	srv.AddTransport(transport.Websocket{
 		KeepAlivePingInterval: 10 * time.Second,
 		Upgrader: websocket.Upgrader{
 			CheckOrigin: func(r *http.Request) bool {
@@ -43,7 +42,6 @@ func main() {
 	srv.AddTransport(transport.Options{})
 	srv.AddTransport(transport.GET{})
 	srv.AddTransport(transport.POST{})
-
 
 	srv.SetQueryCache(lru.New[*ast.QueryDocument](1000))
 
