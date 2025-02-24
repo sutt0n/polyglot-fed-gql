@@ -1,5 +1,5 @@
 
-use async_graphql::{*, futures_util::Stream};
+use async_graphql::{*, futures_util::Stream, futures_util::future};
 
 use super::{types::*, broker::SimpleBroker};
 
@@ -51,7 +51,7 @@ pub struct Subscription;
 
 #[Subscription]
 impl Subscription {
-  async fn messages(&self) -> impl Stream<Item = Message> {
-    SimpleBroker::<Message>::subscribe()
-  }
+    async fn messages(&self, player_id: String) -> impl Stream<Item = Message> {
+        SimpleBroker::<Message>::subscribe_filtered(move |message| future::ready(message.to_player_id == player_id))
+    }
 }

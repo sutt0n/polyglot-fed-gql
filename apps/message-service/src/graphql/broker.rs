@@ -8,7 +8,7 @@ use std::{
 };
 
 use futures_channel::mpsc::{self, UnboundedReceiver, UnboundedSender};
-use futures_util::{Stream, StreamExt};
+use futures_util::{Stream, StreamExt, future};
 use once_cell::sync::Lazy;
 use slab::Slab;
 
@@ -64,5 +64,14 @@ impl<T: Sync + Send + Clone + 'static> SimpleBroker<T> {
             let id = senders.0.insert(tx);
             BrokerStream(id, rx)
         })
+    }
+
+    /// Subscribe to the message of the specified type and filter it with a given predicate, returning a `Stream`.
+    pub fn subscribe_filtered<F>(filter: F) -> impl Stream<Item = T>
+    where
+        F: Fn(&T) -> future::Ready<bool> + Send + 'static, // Use future::Ready from futures_util
+        T: Sync + Send + Clone + 'static,
+    {
+        Self::subscribe().filter(filter)
     }
 }
