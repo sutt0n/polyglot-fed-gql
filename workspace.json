@@ -17,8 +17,8 @@
         }
       }
     },
-    "rust-service": {
-      "root": "apps/rust-service",
+    "message-service": {
+      "root": "apps/message-service",
       "targets": {
         "build": {
           "executor": "@nx/workspace:run-commands",

@@ -1,7 +1,7 @@
 {
-  "name": "nest-service",
+  "name": "player-service",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/nest-service/src",
+  "sourceRoot": "apps/player-service/src",
   "projectType": "application",
   "tags": [],
   "targets": {
@@ -22,15 +22,15 @@
       "defaultConfiguration": "development",
       "dependsOn": ["build"],
       "options": {
-        "buildTarget": "nest-service:build",
+        "buildTarget": "player-service:build",
         "runBuildTargetDependencies": false
       },
       "configurations": {
         "development": {
-          "buildTarget": "nest-service:build:development"
+          "buildTarget": "player-service:build:development"
         },
         "production": {
-          "buildTarget": "nest-service:build:production"
+          "buildTarget": "player-service:build:production"
         }
       }
     },

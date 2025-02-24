@@ -2,7 +2,7 @@
 [workspace]
 resolver = '2'
 members = [
-	'apps/rust-service',
+	'apps/message-service',
 ]
 
 [profile.release]

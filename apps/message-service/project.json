@@ -1,15 +1,15 @@
 {
-  "name": "rust-service",
+  "name": "message-service",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
-  "sourceRoot": "apps/rust-service/src",
+  "sourceRoot": "apps/message-service/src",
   "targets": {
     "build": {
       "cache": true,
       "executor": "@monodon/rust:build",
       "outputs": ["{options.target-dir}"],
       "options": {
-        "target-dir": "dist/target/rust-service"
+        "target-dir": "dist/target/message-service"
       },
       "configurations": {
         "production": {
@@ -22,7 +22,7 @@
       "executor": "@monodon/rust:test",
       "outputs": ["{options.target-dir}"],
       "options": {
-        "target-dir": "dist/target/rust-service"
+        "target-dir": "dist/target/message-service"
       },
       "configurations": {
         "production": {
@@ -35,14 +35,14 @@
       "executor": "@monodon/rust:lint",
       "outputs": ["{options.target-dir}"],
       "options": {
-        "target-dir": "dist/target/rust-service"
+        "target-dir": "dist/target/message-service"
       }
     },
     "run": {
       "executor": "@monodon/rust:run",
       "outputs": ["{options.target-dir}"],
       "options": {
-        "target-dir": "dist/target/rust-service"
+        "target-dir": "dist/target/message-service"
       },
       "configurations": {
         "production": {
