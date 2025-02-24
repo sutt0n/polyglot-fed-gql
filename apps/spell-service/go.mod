@@ -1,4 +1,4 @@
-module apps/go-service
+module apps/spell-service
 
 go 1.22.12
 

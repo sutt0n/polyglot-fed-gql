@@ -2,4 +2,4 @@ go 1.22.12
 
 toolchain go1.23.6
 
-use ./apps/go-service
+use ./apps/spell-service

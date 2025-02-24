@@ -1,8 +1,8 @@
 package main
 
 import (
-	"apps/go-service/graph"
-	"apps/go-service/graph/model"
+	"apps/spell-service/graph"
+	"apps/spell-service/graph/model"
 	"github.com/gorilla/websocket"
 	"log"
 	"net/http"

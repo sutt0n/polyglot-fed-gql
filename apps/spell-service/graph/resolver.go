@@ -1,7 +1,7 @@
 package graph
 
 import (
-	"apps/go-service/graph/model"
+	"apps/spell-service/graph/model"
 	"math/rand"
 	"sync"
 )

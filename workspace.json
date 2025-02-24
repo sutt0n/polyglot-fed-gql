@@ -1,18 +1,18 @@
 {
   "projects": {
-    "go-service": {
-      "root": "apps/go-service",
+    "spell-service": {
+      "root": "apps/spell-service",
       "targets": {
         "build": {
           "executor": "@nx/workspace:run-commands",
           "options": {
-            "command": "go build -o dist/go-service ./apps/go-service"
+            "command": "go build -o dist/spell-service ./apps/spell-service"
           }
         },
         "serve": {
           "executor": "@nx/workspace:run-commands",
           "options": {
-            "command": "go run ./apps/go-service"
+            "command": "go run ./apps/spell-service"
           }
         }
       }
