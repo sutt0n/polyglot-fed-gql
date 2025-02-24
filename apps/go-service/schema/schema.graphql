@@ -24,3 +24,7 @@ type Mutation {
 type Subscription {
   spellsCasted(target: String!): CastedSpell
 }
+
+type Query {
+  spellBook(playerId: ID!): [String]
+}
