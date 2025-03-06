@@ -1,16 +1,20 @@
-
 use async_graphql::{http::GraphiQLSource, Schema};
 use async_graphql_axum::{GraphQL, GraphQLSubscription};
-use axum::{routing::get, Router, response::{IntoResponse, self}};
+use axum::{
+    response::{self, IntoResponse},
+    routing::get,
+    Router,
+};
 use tokio::net::TcpListener;
 
 use crate::graphql;
 
 pub async fn run_server() -> anyhow::Result<()> {
-  let schema = Schema::build(graphql::Query, graphql::Mutation, graphql::Subscription)
-    .finish();
+    let schema = Schema::build(graphql::Query, graphql::Mutation, graphql::Subscription)
+        .enable_federation()
+        .finish();
 
-  let app = Router::new()
+    let app = Router::new()
         .route(
             "/",
             get(graphiql).post_service(GraphQL::new(schema.clone())),

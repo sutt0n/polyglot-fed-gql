@@ -37,6 +37,19 @@
         }
       }
     },
+    "hive-gateway": {
+      "dependsOn": ["supergraph-compose"],
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node_modules/.bin/hive-gateway supergraph -c apps/gateway/src/gateway.config.ts"
+      }
+    },
+    "supergraph-compose": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "rover supergraph compose --elv2-license=accept --config apps/gateway/supergraph.json --output apps/gateway/supergraph.graphql"
+      }
+    },
     "serve": {
       "executor": "@nx/js:node",
       "defaultConfiguration": "development",

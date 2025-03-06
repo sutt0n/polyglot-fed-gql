@@ -1,0 +1,120 @@
+schema
+  @link(url: "https://specs.apollo.dev/link/v1.0")
+  @link(url: "https://specs.apollo.dev/join/v0.3", for: EXECUTION)
+{
+  query: Query
+  mutation: Mutation
+  subscription: Subscription
+}
+
+directive @join__enumValue(graph: join__Graph!) repeatable on ENUM_VALUE
+
+directive @join__field(graph: join__Graph, requires: join__FieldSet, provides: join__FieldSet, type: String, external: Boolean, override: String, usedOverridden: Boolean) repeatable on FIELD_DEFINITION | INPUT_FIELD_DEFINITION
+
+directive @join__graph(name: String!, url: String!) on ENUM_VALUE
+
+directive @join__implements(graph: join__Graph!, interface: String!) repeatable on OBJECT | INTERFACE
+
+directive @join__type(graph: join__Graph!, key: join__FieldSet, extension: Boolean! = false, resolvable: Boolean! = true, isInterfaceObject: Boolean! = false) repeatable on OBJECT | INTERFACE | UNION | ENUM | INPUT_OBJECT | SCALAR
+
+directive @join__unionMember(graph: join__Graph!, member: String!) repeatable on UNION
+
+directive @link(url: String, as: String, for: link__Purpose, import: [link__Import]) repeatable on SCHEMA
+
+type CastedSpell
+  @join__type(graph: SPELLS)
+{
+  spell: String!
+  type: DamageType!
+  playerId: ID!
+  damage: Float!
+}
+
+enum DamageType
+  @join__type(graph: SPELLS)
+{
+  FIRE @join__enumValue(graph: SPELLS)
+  ICE @join__enumValue(graph: SPELLS)
+  LIGHTNING @join__enumValue(graph: SPELLS)
+  POISON @join__enumValue(graph: SPELLS)
+  PHYSICAL @join__enumValue(graph: SPELLS)
+}
+
+scalar join__FieldSet
+
+enum join__Graph {
+  MESSAGES @join__graph(name: "messages", url: "http://localhost:8081/")
+  PLAYERS @join__graph(name: "players", url: "http://localhost:8082/graphql")
+  SPELLS @join__graph(name: "spells", url: "http://localhost:8080/query")
+}
+
+scalar link__Import
+
+enum link__Purpose {
+  """
+  `SECURITY` features provide metadata necessary to securely resolve fields.
+  """
+  SECURITY
+
+  """
+  `EXECUTION` features provide metadata necessary for operation execution.
+  """
+  EXECUTION
+}
+
+type Message
+  @join__type(graph: MESSAGES)
+{
+  id: String!
+  text: String!
+  toPlayerId: String!
+  fromPlayerId: String!
+}
+
+type MessagePayload
+  @join__type(graph: MESSAGES)
+{
+  message: Message!
+}
+
+type Mutation
+  @join__type(graph: MESSAGES)
+  @join__type(graph: PLAYERS)
+  @join__type(graph: SPELLS)
+{
+  sendMessage(input: SendMessageInput!): MessagePayload! @join__field(graph: MESSAGES)
+  enterArea(playerId: String!, area: String!): Player! @join__field(graph: PLAYERS)
+  castSpell(spell: String!, type: DamageType!, playerId: ID!): Boolean @join__field(graph: SPELLS)
+}
+
+type Player
+  @join__type(graph: PLAYERS)
+  @join__type(graph: SPELLS, key: "id")
+{
+  id: ID!
+}
+
+type Query
+  @join__type(graph: MESSAGES)
+  @join__type(graph: PLAYERS)
+  @join__type(graph: SPELLS)
+{
+  message(id: String!): Message! @join__field(graph: MESSAGES)
+  spellBook(playerId: ID!): [String] @join__field(graph: SPELLS)
+}
+
+input SendMessageInput
+  @join__type(graph: MESSAGES)
+{
+  text: String!
+  toPlayerId: String!
+  fromPlayerId: String!
+}
+
+type Subscription
+  @join__type(graph: PLAYERS)
+  @join__type(graph: SPELLS)
+{
+  nearbyPlayers(area: String!): Player @join__field(graph: PLAYERS)
+  spellsCasted(target: String!): CastedSpell @join__field(graph: SPELLS)
+}

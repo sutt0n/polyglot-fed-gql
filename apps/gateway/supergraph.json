@@ -1,0 +1,20 @@
+{
+  "federation_version": "=2.9.0",
+  "subgraphs": {
+    "spells": {
+      "schema": {
+        "subgraph_url": "http://localhost:8080/query"
+      }
+    },
+    "messages": {
+      "schema": {
+        "subgraph_url": "http://localhost:8081"
+      }
+    },
+    "players": {
+      "schema": {
+        "subgraph_url": "http://localhost:8082/graphql"
+      }
+    }
+  }
+}

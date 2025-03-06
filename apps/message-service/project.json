@@ -38,7 +38,7 @@
         "target-dir": "dist/target/message-service"
       }
     },
-    "run": {
+    "serve": {
       "executor": "@monodon/rust:run",
       "outputs": ["{options.target-dir}"],
       "options": {
