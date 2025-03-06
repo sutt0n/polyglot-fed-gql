@@ -14,7 +14,7 @@
         "outputPath": "dist/apps/gateway",
         "format": ["cjs"],
         "bundle": false,
-        "main": "apps/gateway/src/main.ts",
+        "main": "apps/gateway/src/gateway.config.ts",
         "tsConfig": "apps/gateway/tsconfig.app.json",
         "assets": ["apps/gateway/src/assets"],
         "generatePackageJson": true,
